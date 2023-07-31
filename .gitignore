@@ -1,0 +1,4 @@
+# Ignore catalogs
+__pycache__/
+.pytest_cache/
+

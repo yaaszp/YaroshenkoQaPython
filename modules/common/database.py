@@ -72,6 +72,12 @@ class Database:
         record = self.cursor.fetchall()
         return record
 
+    def get_from_table_by_id(self, table, id):
+        query = f"SELECT * FROM {table} WHERE id = {id}"
+        self.cursor.execute(query)
+        record = self.cursor.fetchall()
+        return record
+
     def get_sum_column_from_table(self, column, table):
         query = f"SELECT sum({column}) FROM {table}"
         self.cursor.execute(query)
@@ -84,14 +90,8 @@ class Database:
         record = self.cursor.fetchall()
         return record
 
-    def get_orders_by_foreign_key(self, foreign_key, qnt):
-        query = f"SELECT * FROM orders WHERE {foreign_key} = {qnt}"
-        self.cursor.execute(query)
-        record = self.cursor.fetchall()
-        return record
-
-    def get_all_from_table_by_id(self, table, id):
-        query = f"SELECT * FROM {table} WHERE id = {id}"
+    def get_record_from_table_by_field_name(self, table, field_name, value):
+        query = f"SELECT * FROM {table} WHERE {field_name} = {value}"
         self.cursor.execute(query)
         record = self.cursor.fetchall()
         return record
@@ -103,5 +103,10 @@ class Database:
 
     def delete_record_from_table_by_id(self, table, id):
         query = f"DELETE FROM {table} WHERE id = {id}"
+        self.cursor.execute(query)
+        self.connection.commit()
+
+    def insert_order(self, id, customer_id, product_id, order_date):
+        query = f"INSERT OR REPLACE INTO orders (id, customer_id, product_id, order_date) VALUES ({id}, {customer_id}, {product_id}, '{order_date}')"
         self.cursor.execute(query)
         self.connection.commit()

@@ -142,9 +142,7 @@ def test_get_commit_by_sha_as_param(github_api):
 
 @pytest.mark.api_additional
 def test_get_commit_by_author(github_api):
-    body = github_api.get_commits_by_author(
-        "octocat", "Hello-World", "cameron@github.com"
-    )
+    body = github_api.get_commits_by_author("octocat", "Hello-World", "Cameron423698")
     dic = body[0]
     commit = dic.get("commit")
     author = commit.get("author")
@@ -164,13 +162,11 @@ def test_get_commit_by_author_(github_api):
 
 @pytest.mark.api_additional
 def test_get_commit_by_committer(github_api):
-    body = github_api.get_commits_by_committer(
-        "octocat", "Hello-World", "cameron@github.com"
-    )
+    body = github_api.get_commits_by_committer("octocat", "Hello-World", "Spaceghost")
     dic = body[0]
     commit = dic.get("commit")
     committer = commit.get("committer")
-    assert committer.get("email") == "cameron@github.com"
+    assert committer.get("email") == "Johnneylee.rollins@gmail.com"
 
 
 @pytest.mark.api_additional
