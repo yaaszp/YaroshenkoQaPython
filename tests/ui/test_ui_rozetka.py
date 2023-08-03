@@ -1,6 +1,4 @@
 import pytest
-from modules.ui.page_objects.Rozetka.rozetka_home_page import HomePage
-from modules.ui.page_objects.Rozetka.rozetka_log_in_page import LogInPage
 
 
 # Check that main elements of HomePage is visible
@@ -44,6 +42,7 @@ def test_log_in_window_is_visible(home_page):
     home_page.go_to()
     home_page.click_log_in_button()
     assert home_page.log_in_window_is_visible() == True
+    home_page.close()
 
 
 # Check that cart modal window is visible
@@ -54,10 +53,32 @@ def test_cart_window_is_visible(home_page):
     home_page.go_to()
     home_page.click_cart_button()
     assert home_page.cart_window_is_visible() == True
+    home_page.close()
+
+
+# Check error message on modal log in window
 
 
 @pytest.mark.ui_additional
 def test_check_login_page(home_page):
-    login_page = home_page.go_to_login_page()
-    # login_page.
-    # login_page.
+    home_page.go_to()
+    home_page.click_log_in_button()
+    home_page.enter_email("test@gmail.com")
+    home_page.enter_password("qwerty")
+    home_page.click_remember_me_checkbox()
+    home_page.click_enter_button()
+    assert home_page.get_error_message() == "Необхідно підтвердити, що ви не робот"
+    home_page.close()
+
+
+# Add product to cart and check that count equal expected count
+
+
+@pytest.mark.ui_additional
+def test_check_count_product_in_cart(home_page):
+    home_page.go_to()
+    home_page.enter_search_query("smartphone")
+    search_page = home_page.go_to_search_page()
+    search_page.add_product_to_cart()
+    assert search_page.get_count_product_from_cart() == "1"
+    search_page.close()

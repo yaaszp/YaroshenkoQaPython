@@ -3,8 +3,8 @@ from modules.api.clients.github import GitHub
 from modules.common.database import Database
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
-from modules.ui.page_objects.Rozetka.rozetka_base_page import BasePage
 from modules.ui.page_objects.Rozetka.rozetka_home_page import HomePage
+from selenium.webdriver.chrome.options import Options
 
 
 class User:
@@ -47,7 +47,10 @@ def db():
 def chrome_driver():
     path = r"D:\\python_basics\\Repo\\YaroshenkoQaPython"
     driver_name = "chromedriver.exe"
-    driver = webdriver.Chrome(service=Service(path + driver_name))
+    options = Options()
+    options.page_load_strategy = "normal"
+    driver = webdriver.Chrome(options=options, service=Service(path + driver_name))
+    driver.maximize_window()
 
     yield driver
 
