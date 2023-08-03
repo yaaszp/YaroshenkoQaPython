@@ -1,10 +1,8 @@
-from modules.ui.page_objects.Rozetka.home_page import HomePage
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.common.keys import Keys
+from modules.ui.page_objects.Rozetka.rozetka_base_page import BasePage
 
 
-class LogInPage(HomePage):
+class LogInPage(BasePage):
     EMAIL_INPUT_FIELD = "//*[@id='auth_email']"
     PASSWORD_INPUT_FIELD = "//*[@id='auth_pass']"
     ENTER_BUTTON = (
@@ -14,8 +12,11 @@ class LogInPage(HomePage):
     REMEMBER_ME_CHECKBOX = "//*[@id='remember_me']"
     WARNING_MESSAGE = "//rz-single-modal-window//rz-user-identification/rz-auth/div/form/fieldset//strong[text()=' Введено невірний пароль! ']"
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, driver) -> None:
+        super().__init__(driver)
+
+    def go_to(self):
+        self.driver.get("")
 
     def enter_email(self, email):
         self.driver.implicitly_wait(10)

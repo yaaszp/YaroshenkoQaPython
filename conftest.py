@@ -1,6 +1,10 @@
 import pytest
 from modules.api.clients.github import GitHub
 from modules.common.database import Database
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from modules.ui.page_objects.Rozetka.rozetka_base_page import BasePage
+from modules.ui.page_objects.Rozetka.rozetka_home_page import HomePage
 
 
 class User:
@@ -35,5 +39,21 @@ def github_api():
 
 @pytest.fixture
 def db():
-    db = Database()
-    yield db
+    database = Database()
+    yield database
+
+
+@pytest.fixture
+def chrome_driver():
+    path = r"D:\\python_basics\\Repo\\YaroshenkoQaPython"
+    driver_name = "chromedriver.exe"
+    driver = webdriver.Chrome(service=Service(path + driver_name))
+
+    yield driver
+
+    driver.quit()
+
+
+@pytest.fixture
+def home_page(chrome_driver):
+    return HomePage(chrome_driver)

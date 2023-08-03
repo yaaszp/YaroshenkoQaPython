@@ -37,12 +37,15 @@ def test_repo_with_single_char_be_found(github_api):
 
 # The additional tests
 
+test_data_1 = [("yaaszp", "Oleksii Yaroshenko"), ("octocat", "The Octocat")]
+
 
 @pytest.mark.api_additional
-def test_user_exists(github_api):
-    user = github_api.get_user("yaaszp")
-    assert user["login"] == "yaaszp"
-    assert user["name"] == "Oleksii Yaroshenko"
+@pytest.mark.parametrize("login, expected_name", test_data_1)
+def test_user_exists(login, expected_name, github_api):
+    user = github_api.get_user(login)
+    assert user["login"] == login
+    assert user["name"] == expected_name
 
 
 @pytest.mark.api_additional
@@ -75,106 +78,166 @@ def test_list_of_commits_not_found(github_api):
     assert body["message"] == "Not Found"
 
 
+test_data_2 = [("octocat", "Hello-World"), ("yaaszp", "YaroshenkoQaPython")]
+
+
 @pytest.mark.api_additional
-def test_list_of_commits_can_be_found_(github_api):
-    body = github_api.get_commits("octocat", "Hello-World")
+@pytest.mark.parametrize("login, repo_name", test_data_2)
+def test_list_of_commits_can_be_found_(login, repo_name, github_api):
+    body = github_api.get_commits(login, repo_name)
 
     # Check that the list from the body is not empty
     assert len(body) != 0
 
 
+# @pytest.mark.api_additional
+# def test_list_of_commits_can_be_found(github_api):
+#     body = github_api.get_commits("yaaszp", "YaroshenkoQaPython")
+
+#     # Check that the list from the body is not empty
+#     assert len(body) != 0
+
+test_data_3 = [
+    (
+        "yaaszp",
+        "YaroshenkoQaPython",
+        "ee401468e6ace74a20549a9c12c08a0d8db947b0",
+        "Frame structure",
+        "Oleksii Yaroshenko",
+    ),
+    (
+        "octocat",
+        "Hello-World",
+        "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e",
+        "first commit",
+        "cameronmcefee",
+    ),
+]
+
+
 @pytest.mark.api_additional
-def test_list_of_commits_can_be_found(github_api):
-    body = github_api.get_commits("yaaszp", "YaroshenkoQaPython")
-
-    # Check that the list from the body is not empty
-    assert len(body) != 0
-
-
-@pytest.mark.api_additional
-def test_get_details_of_commit_(github_api):
-    body = github_api.get_commits("yaaszp", "YaroshenkoQaPython")
+@pytest.mark.parametrize(
+    "login, repo_name, expected_sha, expected_message, expected_name", test_data_3
+)
+def test_get_details_of_commit_(
+    login, repo_name, expected_sha, expected_message, expected_name, github_api
+):
+    body = github_api.get_commits(login, repo_name)
     dic = body[-1]
     commit = dic["commit"]
     author = commit.get("author")
 
-    assert dic["sha"] == "ee401468e6ace74a20549a9c12c08a0d8db947b0"
-    assert commit.get("message") == "Frame structure"
-    assert author.get("name") == "Oleksii Yaroshenko"
+    assert dic["sha"] == expected_sha
+    assert commit.get("message") == expected_message
+    assert author.get("name") == expected_name
+
+
+# @pytest.mark.api_additional
+# def test_get_details_of_commit(github_api):
+#     body = github_api.get_commits("octocat", "Hello-World")
+#     dic = body[-1]
+#     commit = dic["commit"]
+#     author = commit.get("author")
+
+#     assert dic["sha"] == "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
+#     assert commit.get("message") == "first commit"
+#     assert author.get("name") == "cameronmcefee"
+
+
+test_data_4 = [
+    ("yaaszp", "YaroshenkoQaPython", "ee401468e6ace74a20549a9c12c08a0d8db947b0"),
+    ("octocat", "Hello-World", "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"),
+]
 
 
 @pytest.mark.api_additional
-def test_get_details_of_commit(github_api):
-    body = github_api.get_commits("octocat", "Hello-World")
-    dic = body[-1]
-    commit = dic["commit"]
-    author = commit.get("author")
-
-    assert dic["sha"] == "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
-    assert commit.get("message") == "first commit"
-    assert author.get("name") == "cameronmcefee"
+@pytest.mark.parametrize("login, repo_name, sha", test_data_4)
+def test_get_commit_by_sha_(login, repo_name, sha, github_api):
+    body = github_api.get_commits_by_sha(login, repo_name, sha)
+    assert body["sha"] == sha
 
 
-@pytest.mark.api_additional
-def test_get_commit_by_sha_(github_api):
-    body = github_api.get_commits_by_sha(
-        "yaaszp", "YaroshenkoQaPython", "ee401468e6ace74a20549a9c12c08a0d8db947b0"
-    )
-    assert body["sha"] == "ee401468e6ace74a20549a9c12c08a0d8db947b0"
+# @pytest.mark.api_additional
+# def test_get_commit_by_sha(github_api):
+#     body = github_api.get_commits_by_sha(
+#         "octocat", "Hello-World", "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
+#     )
+#     assert body["sha"] == "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
 
-
-@pytest.mark.api_additional
-def test_get_commit_by_sha(github_api):
-    body = github_api.get_commits_by_sha(
-        "octocat", "Hello-World", "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
-    )
-    assert body["sha"] == "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
+test_data_5 = [
+    ("octocat", "Hello-World", "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"),
+    ("yaaszp", "YaroshenkoQaPython", "ee401468e6ace74a20549a9c12c08a0d8db947b0"),
+]
 
 
 @pytest.mark.api_additional
-def test_get_commit_by_sha_as_param(github_api):
-    body = github_api.get_commits_by_sha(
-        "octocat", "Hello-World", "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
-    )
+@pytest.mark.parametrize("login, repo_name, sha", test_data_5)
+def test_get_commit_by_sha_as_param(login, repo_name, sha, github_api):
+    body = github_api.get_commits_by_sha(login, repo_name, sha)
 
-    assert body.get("sha") == "553c2077f0edc3d5dc5d17262f6aa498e69d6f8e"
+    assert body.get("sha") == sha
+
+
+test_data_6 = [
+    ("octocat", "Hello-World", "Cameron423698", "cameron@github.com"),
+    (
+        "yaaszp",
+        "YaroshenkoQaPython",
+        "a.s.yaroshenko.zp@gmail.com",
+        "a.s.yaroshenko.zp@gmail.com",
+    ),
+]
 
 
 @pytest.mark.api_additional
-def test_get_commit_by_author(github_api):
-    body = github_api.get_commits_by_author("octocat", "Hello-World", "Cameron423698")
+@pytest.mark.parametrize("login, repo_name, author, expected_email", test_data_6)
+def test_get_commit_by_author(login, repo_name, author, expected_email, github_api):
+    body = github_api.get_commits_by_author(login, repo_name, author)
     dic = body[0]
     commit = dic.get("commit")
     author = commit.get("author")
-    assert author.get("email") == "cameron@github.com"
+    assert author.get("email") == expected_email
+
+
+# @pytest.mark.api_additional
+# def test_get_commit_by_author_(github_api):
+#     body = github_api.get_commits_by_author()
+#     dic = body[0]
+#     commit = dic.get("commit")
+#     author = commit.get("author")
+#     assert author.get("email") == ""
+
+test_data_7 = [
+    ("octocat", "Hello-World", "Spaceghost", "Johnneylee.rollins@gmail.com"),
+    (
+        "yaaszp",
+        "YaroshenkoQaPython",
+        "a.s.yaroshenko.zp@gmail.com",
+        "a.s.yaroshenko.zp@gmail.com",
+    ),
+]
 
 
 @pytest.mark.api_additional
-def test_get_commit_by_author_(github_api):
-    body = github_api.get_commits_by_author(
-        "yaaszp", "YaroshenkoQaPython", "a.s.yaroshenko.zp@gmail.com"
-    )
-    dic = body[0]
-    commit = dic.get("commit")
-    author = commit.get("author")
-    assert author.get("email") == "a.s.yaroshenko.zp@gmail.com"
-
-
-@pytest.mark.api_additional
-def test_get_commit_by_committer(github_api):
-    body = github_api.get_commits_by_committer("octocat", "Hello-World", "Spaceghost")
+@pytest.mark.parametrize(
+    "login, repo_name, name_committer, expected_email", test_data_7
+)
+def test_get_commit_by_committer(
+    login, repo_name, name_committer, expected_email, github_api
+):
+    body = github_api.get_commits_by_committer(login, repo_name, name_committer)
     dic = body[0]
     commit = dic.get("commit")
     committer = commit.get("committer")
-    assert committer.get("email") == "Johnneylee.rollins@gmail.com"
+    assert committer.get("email") == expected_email
 
 
-@pytest.mark.api_additional
-def test_get_commit_by_committer_(github_api):
-    body = github_api.get_commits_by_committer(
-        "yaaszp", "YaroshenkoQaPython", "a.s.yaroshenko.zp@gmail.com"
-    )
-    dic = body[0]
-    commit = dic.get("commit")
-    committer = commit.get("committer")
-    assert committer.get("email") == "a.s.yaroshenko.zp@gmail.com"
+# @pytest.mark.api_additional
+# def test_get_commit_by_committer_(github_api):
+#     body = github_api.get_commits_by_committer(
+#         "yaaszp", "YaroshenkoQaPython", "a.s.yaroshenko.zp@gmail.com"
+#     )
+#     dic = body[0]
+#     commit = dic.get("commit")
+#     committer = commit.get("committer")
+#     assert committer.get("email") == "a.s.yaroshenko.zp@gmail.com"
