@@ -18,7 +18,7 @@ class HomePage(BasePage):
 
     EMAIL_INPUT_FIELD = "//*[@id='auth_email']"
     PASSWORD_INPUT_FIELD = "//*[@id='auth_pass']"
-    REMEMBER_ME_CHECKBOX = "/html/body/app-root/rz-single-modal-window/div[3]/div[2]/rz-user-identification/rz-auth/div/form/fieldset/div[3]/label"
+    REMEMBER_ME_CHECKBOX = "//rz-single-modal-window//rz-user-identification/rz-auth//form/fieldset/div[3]/label"
     ENTER_BUTTON = (
         "//rz-single-modal-window//rz-auth//form/fieldset//button[text()=' Увійти ']"
     )
@@ -52,10 +52,12 @@ class HomePage(BasePage):
         return self.driver.find_element(By.XPATH, self.MAIN_CONTENT).is_displayed()
 
     def log_in_window_is_visible(self):
-        return self.driver.find_element(By.XPATH, self.LOG_IN_WINDOW).is_displayed()
+        log_in_window = self.waite_element_by_locator(self.LOG_IN_WINDOW)
+        return log_in_window.is_displayed()
 
     def cart_window_is_visible(self):
-        return self.driver.find_element(By.XPATH, self.CART_WINDOW).is_displayed()
+        cart_window = self.waite_element_by_locator(self.CART_WINDOW)
+        return cart_window.is_displayed()
 
     def get_current_url(self):
         return self.driver.current_url
@@ -65,36 +67,23 @@ class HomePage(BasePage):
         return current_url.count(txt)
 
     def enter_email(self, email):
-        wait = WebDriverWait(self.driver, timeout=15)
-        email_field = wait.until(
-            lambda d: d.find_element(By.XPATH, self.EMAIL_INPUT_FIELD)
-        )
+        email_field = self.waite_element_by_locator(self.EMAIL_INPUT_FIELD)
         email_field.send_keys(email)
 
     def enter_password(self, password):
-        wait = WebDriverWait(self.driver, timeout=15)
-        password_field = wait.until(
-            lambda d: d.find_element(By.XPATH, self.PASSWORD_INPUT_FIELD)
-        )
+        password_field = self.waite_element_by_locator(self.PASSWORD_INPUT_FIELD)
         password_field.send_keys(password)
 
     def click_remember_me_checkbox(self):
-        wait = WebDriverWait(self.driver, timeout=15)
-        remember_me_checkbox = wait.until(
-            lambda d: d.find_element(By.XPATH, self.REMEMBER_ME_CHECKBOX)
-        )
+        remember_me_checkbox = self.waite_element_by_locator(self.REMEMBER_ME_CHECKBOX)
         remember_me_checkbox.click()
 
     def click_enter_button(self):
-        wait = WebDriverWait(self.driver, timeout=15)
-        enter_button = wait.until(lambda d: d.find_element(By.XPATH, self.ENTER_BUTTON))
+        enter_button = self.waite_element_by_locator(self.ENTER_BUTTON)
         enter_button.click()
 
     def get_error_message(self):
-        wait = WebDriverWait(self.driver, timeout=15)
-        error_message = wait.until(
-            lambda d: d.find_element(By.XPATH, self.ERROR_MESSAGE)
-        )
+        error_message = self.waite_element_by_locator(self.ERROR_MESSAGE)
         return error_message.text
 
     def go_to_search_page(self):
