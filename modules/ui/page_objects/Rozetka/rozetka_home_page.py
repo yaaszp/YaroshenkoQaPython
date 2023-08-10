@@ -62,9 +62,13 @@ class HomePage(BasePage):
     def get_current_url(self):
         return self.driver.current_url
 
-    def get_text_from_url(self, txt):
+    def analyze_current_url(self, txt):
+        temp = False
         current_url = self.driver.current_url
-        return current_url.count(txt)
+        count = current_url.count(txt)
+        if count != 0:
+            temp = True
+        return temp
 
     def enter_email(self, email):
         email_field = self.waite_element_by_locator(self.EMAIL_INPUT_FIELD)

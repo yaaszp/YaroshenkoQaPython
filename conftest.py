@@ -59,4 +59,10 @@ def chrome_driver():
 
 @pytest.fixture
 def home_page(chrome_driver):
-    return HomePage(chrome_driver)
+    page = HomePage(chrome_driver)
+
+    yield page
+    
+    page.close()
+
+    
