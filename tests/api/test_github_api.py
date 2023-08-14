@@ -196,3 +196,14 @@ def test_get_commit_by_committer(
     commit = dic.get("commit")
     committer = commit.get("committer")
     assert committer.get("email") == expected_email
+
+
+@pytest.mark.api_additional
+def test_update_comment_without_authorization(github_api):
+    body, status_code = github_api.update_comment("octocat", "Hello-World", "1146825")
+
+    # We used method Patch without authorization.
+    # So, server returned 401 status code (Unauthorized. The requested page needs a username and a password)
+    # This action requires authorization
+    assert status_code == 401
+    assert body["message"] == "Requires authentication"
