@@ -1,6 +1,6 @@
 import pytest
 from modules.common.database import Database
-from modules.common.general import General
+from modules.common.general import Check
 
 
 # The required tests from the course
@@ -162,8 +162,7 @@ def test_check_orders_by_customer_id(db):
 def test_check_field_name_from_products(db):
     db.insert_product(99, "test!", "data", 999)
     list_of_data = db.get_from_table_by_id("products", 99)
-    gn = General()
-    special_symbols = gn.check_string_on_special_symbols(list_of_data[0][1])
+    special_symbols = Check().check_string_on_special_symbols(list_of_data[0][1])
     db.delete_product_by_id(99)
     qnt = db.select_product_qnt_by_id(99)
 
@@ -179,9 +178,8 @@ def test_check_field_name_from_products(db):
 def test_check_field_name_from_customers(db):
     db.insert_customer(99, "Jo!hn1", "test", "test", 30500, "Test")
     list_of_data = db.get_from_table_by_id("customers", 99)
-    gn = General()
-    digits = gn.check_string_on_digit(list_of_data[0][1])
-    special_symbols = gn.check_string_on_special_symbols(list_of_data[0][1])
+    digits = Check().check_string_on_digit(list_of_data[0][1])
+    special_symbols = Check().check_string_on_special_symbols(list_of_data[0][1])
     db.delete_record_from_table_by_id("customers", 99)
     qnt = db.get_from_table_by_id("customers", 99)
 
@@ -198,9 +196,8 @@ def test_check_field_name_from_customers(db):
 def test_check_field_city_from_customers(db):
     db.insert_customer(99, "John", "Test", "Ky2iv!", 30500, "Test")
     list_of_data = db.get_from_table_by_id("customers", 99)
-    gn = General()
-    digits = gn.check_string_on_digit(list_of_data[0][3])
-    special_symbols = gn.check_string_on_special_symbols(list_of_data[0][3])
+    digits = Check().check_string_on_digit(list_of_data[0][3])
+    special_symbols = Check().check_string_on_special_symbols(list_of_data[0][3])
     db.delete_record_from_table_by_id("customers", 99)
     qnt = db.get_from_table_by_id("customers", 99)
 
@@ -217,9 +214,8 @@ def test_check_field_city_from_customers(db):
 def test_check_field_country_from_customers(db):
     db.insert_customer(99, "John", "Test", "Kyiv", 30500, "Ukr5aine!")
     list_of_data = db.get_from_table_by_id("customers", 99)
-    gn = General()
-    digits = gn.check_string_on_digit(list_of_data[0][5])
-    special_symbols = gn.check_string_on_special_symbols(list_of_data[0][5])
+    digits = Check().check_string_on_digit(list_of_data[0][5])
+    special_symbols = Check().check_string_on_special_symbols(list_of_data[0][5])
     db.delete_record_from_table_by_id("customers", 99)
     qnt = db.get_from_table_by_id("customers", 99)
 
@@ -237,9 +233,8 @@ def test_check_field_postalCode_from_customers(db):
     db.insert_customer(99, "John", "Test", "Kyiv", "QwErTy!", "Ukraine")
     list_of_data = db.get_from_table_by_id("customers", 99)
     print(type(list_of_data[0][4]))
-    gn = General()
-    digits = gn.check_string_on_digit(list_of_data[0][4])
-    special_symbols = gn.check_string_on_special_symbols(list_of_data[0][4])
+    digits = Check().check_string_on_digit(list_of_data[0][4])
+    special_symbols = Check().check_string_on_special_symbols(list_of_data[0][4])
     db.delete_record_from_table_by_id("customers", 99)
     qnt = db.get_from_table_by_id("customers", 99)
 

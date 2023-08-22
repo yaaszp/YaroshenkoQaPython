@@ -24,11 +24,17 @@ class GitHub:
 
     # Additional methods
 
+    # link to documentation
+    # https://docs.github.com/en/rest/emojis/emojis?apiVersion=2022-11-28
+
     def get_emojis(self):
         r = requests.get("https://api.github.com/emojis", headers=self.accept_header)
         body = r.json()
 
         return body
+
+    # link to documentation
+    # https://docs.github.com/en/rest/commits/commits?apiVersion=2022-11-28#list-commits
 
     def get_commits(self, owner, repo):
         r = requests.get(
@@ -77,6 +83,9 @@ class GitHub:
         body = r.json()
 
         return body
+
+    # link to documentation
+    # https://docs.github.com/en/rest/issues/comments?apiVersion=2022-11-28
 
     def update_comment(self, owner, repo, id_comment):
         r = requests.patch(
