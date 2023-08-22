@@ -1,5 +1,4 @@
 class Check:
-
     # This method returns True if string contains digits
     @staticmethod
     def check_string_on_digit(str):

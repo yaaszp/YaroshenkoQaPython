@@ -43,19 +43,15 @@ File “General.py” contains a class with static methods. These methods work w
 	
 
 In order to start tests you need to execute command:
-
 pytest -m your_marks
 
 For example, in order to start API tests you need to execute command:
-
 pytest -m api_apiadditional
 
 In order to start UI tests for Rozetka you need to execute command:
-
 pytest -m ui_additional
 
 In order to start DataBase tests you need to execute command:
-
 pytest -m database_additional
 pytest -m database_additional_negative
 
