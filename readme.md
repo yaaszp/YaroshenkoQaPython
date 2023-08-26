@@ -1,7 +1,7 @@
 This is an educational project. This project contains UI tests, API tests, and DB tests. 
-The project has a base frame structure
-For UI tests was used page object model.
-For API tests was created base API client.
+The project has a base frame structure.
+For UI tests were used page object model.
+For API tests were created base API client.
 
 The test framework has the next base structure:
 
